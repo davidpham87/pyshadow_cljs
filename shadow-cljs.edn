@@ -1,0 +1,20 @@
+;; shadow-cljs configuration
+{:source-paths
+ ["src"]
+
+ :dependencies
+ [[org.clojure/clojure "1.10.0"]
+  [org.clojure/clojurescript "1.10.439"]
+  [org.clojure/core.async "0.4.490"
+   :exclusions [org.clojure/tools.reader]]
+  [reagent "0.8.1"]]
+
+ :builds
+ {:app
+  {:target :browser
+   :output-dir "public/js"
+   :asset-path "/js"
+   :modules {:main {:init-fn pycljs.core/init}}
+   :devtools
+   {:http-root "public"
+    :http-port 8080}}}}
