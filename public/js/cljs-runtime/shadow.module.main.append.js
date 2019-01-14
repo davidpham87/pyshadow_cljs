@@ -1,3 +1,3 @@
 
-pycljs.core.init();
+monitor_app.core.main();
 shadow.cljs.devtools.client.browser.module_loaded('main');

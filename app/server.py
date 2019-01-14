@@ -21,7 +21,9 @@ def public_resource(resource):
 @app.route('/ts/<string:ts_id>')
 def load_data(ts_id):
     path = os.path.join(DATA_DIR, ts_id+'.csv')
-    return jsonify({"text": pd.read_csv(path).to_dict()})
+    df = pd.read_csv(path)
+    df = df.set_index('date')
+    return jsonify(df.to_dict())
 
 @app.route('/')
 def index():
@@ -31,7 +33,7 @@ def index():
 
 @app.route('/newtext')
 def newtext():
-    x = random.randrange(10)
+    x = random.randrange(100)
     return jsonify({'text': 'hello changed? Text ' + str(x)})
 
 if __name__ == '__main__':
