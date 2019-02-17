@@ -3,7 +3,7 @@ import random
 import pandas as pd
 
 from flask import Flask, send_from_directory, jsonify
-# from flask_cors import CORS
+#from flask_cors import CORS
 
 app = Flask(__name__)
 # CORS(app)
@@ -34,7 +34,7 @@ def index():
 @app.route('/newtext')
 def newtext():
     x = random.randrange(100)
-    return jsonify({'text': 'hello changed? Text ' + str(x)})
+    return jsonify({'text': 'HELLO changed? Text ' + str(x)})
 
 if __name__ == '__main__':
     app.run(debug=True)

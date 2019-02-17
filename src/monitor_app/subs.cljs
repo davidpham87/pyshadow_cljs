@@ -26,5 +26,7 @@
    (let [[_ ts-id ts-attr] query-v]
      (ts-attr ((keyword ts-id) ts-data)))))
 
-
+(reg-sub
+ :hello-text
+ (fn [db _] (get-in db [:server-response :text])))
 

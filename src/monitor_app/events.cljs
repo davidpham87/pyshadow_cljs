@@ -22,6 +22,7 @@
  :initialise-db ;; sets up initial application state
  (fn-traced [_ _] {:db {:text "Hello"}}))
 
+
 (reg-event-fx
  :get-ts-data
  (fn-traced
@@ -30,17 +31,41 @@
                 :uri (endpoint "ts" ts-id)
                 :params params
                 :response-format (json-response-format {:keywords? true})
-                :on-success [:get-ts-data-sucess ts-id]
+                :on-success [:get-ts-data-success ts-id]
                 :on-failure [:api-request-error :get-ts-data]}
    :db (assoc-in db [:loading :ts-data] true)}))
 
 (reg-event-db
- :get-ts-data-sucess
+ :get-ts-data-success
  (fn
   [db [_ ts-id result]]
   (-> db
       (assoc-in [:loading :ts-data] false)
       (assoc-in [:ts-data (keyword ts-id)] result))))
+
+(defn http-xhrio-map
+  [event-id m]
+  (let [default-map
+        {:method :get
+         :response-format (json-response-format {:keywords? true})
+         :on-success [(keyword (str (name event-id) "-success"))]
+         :on-failure [:api-request-error event-id]}]
+    (merge default-map m)))
+
+(http-xhrio-map :hello {:uri (endpoint "what")})
+
+(reg-event-fx
+ :hello-world
+ (fn-traced
+  [{:keys [db]} _]
+  {:http-xhrio (http-xhrio-map :hello-world {:uri (endpoint "newtext")})
+   :db db}))
+
+(reg-event-db
+ :hello-world-success
+ (fn-traced
+  [db [_ result]]
+  (assoc db :server-response result)))
 
 (reg-event-fx                                                                ;; usage: (dispatch [:set-active-page {:page :home})
  :set-active-page                                                            ;; triggered when the user clicks on a link that redirects to a another page
